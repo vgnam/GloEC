@@ -1,13 +1,10 @@
-# GloEC: a hierarchical-aware global model for enzyme function prediction
+# GloEC: Hướng dẫn Training Model
 
-## Abstract
-The annotation of enzyme function is a fundamental challenge in industrial biotechnology and pathologies. Numerous computational methods have been proposed to predict enzyme function by annotating enzyme labels with Enzyme Commission number. However, the existing methods face difficulties in modelling the hierarchical structure of enzyme label in a global view. Moreover, they haven't gone entirely to leverage the mutual interactions between different levels of enzyme label. Here, we formulate the hierarchy of enzyme label as a directed enzyme graph and propose a hierarchy-GCN (Graph Convolutional Network) encoder to globally model enzyme label dependency on the enzyme graph. Based on the enzyme hierarchy encoder, we develop an end-to-end hierarchical-aware global model named GloEC to predict enzyme function. GloEC learns hierarchical-aware enzyme label embeddings via the hierarchy-GCN encoder and conducts deductive fusion of label-aware enzyme features to predict enzyme labels. Meanwhile our hierarchy-GCN encoder is designed to bidirectionally compute to investigate the enzyme label correlation information in both bottom-up and top-down manners, which has not been explored in enzyme function prediction. Comparative experiments on three benchmark datasets show that GloEC achieves better predictive performance as compared to the existing methods. The case studies also demonstrate that GloEC is capable of effectively predicting the function of isoenzyme.
+Dự án **GloEC** — mô hình dự đoán chức năng enzyme dựa trên cấu trúc phân cấp (hierarchical-aware global model).
 
 ---
 
-## Training Guide
-
-### 1. Yêu cầu hệ thống
+## 1. Yêu cầu hệ thống
 
 | Thành phần | Yêu cầu |
 |------------|---------|
@@ -31,7 +28,7 @@ py -3.10 -c "import torch; print(torch.cuda.is_available()); print(torch.cuda.ge
 
 ---
 
-### 2. Cấu trúc thư mục quan trọng
+## 2. Cấu trúc thư mục quan trọng
 
 ```
 GloEC/
@@ -60,9 +57,9 @@ GloEC/
 
 ---
 
-### 3. Chuẩn bị dữ liệu
+## 3. Chuẩn bị dữ liệu
 
-#### 3.1 Tạo các thư mục cần thiết
+### 3.1 Tạo các thư mục cần thiết
 
 ```bash
 cd D:\GloEC
@@ -71,9 +68,9 @@ mkdir logs
 mkdir fold_data
 ```
 
-#### 3.2 Tạo ESM Embeddings (BẮT BUỘC trước khi train)
+### 3.2 Tạo ESM Embeddings
 
-Model GloEC **không nhận trực tiếp chuỗi amino acid**, mà cần **ESM-2 embeddings** (1280 chiều) đã được pre-compute.
+Model GloEC không nhận trực tiếp chuỗi amino acid, mà cần **ESM-2 embeddings** (1280 chiều) đã được pre-compute.
 
 **Sử dụng Hugging Face (khuyến nghị):**
 
@@ -94,16 +91,11 @@ Script sẽ:
 - Nếu gặp lỗi **Out of Memory (OOM)**, mở `create_esm_hf.py` và giảm `BATCH_SIZE` xuống `2` hoặc `1`.
 - Nếu không có GPU, script vẫn chạy được trên CPU nhưng rất chậm.
 
-**Kiểm tra embedding đã có chưa:**
-```bash
-ls D:\GloEC\02.Datasets\uniport_2022_5\*.pt
-```
-
 ---
 
-### 4. Training
+## 4. Training
 
-#### 4.1 Cấu hình Training
+### 4.1 Cấu hình Training
 
 Mở file `01.Code/config_util.py` để điều chỉnh các hyperparameters:
 
@@ -134,7 +126,7 @@ self.is_continue_train = True
 self.continue_train_num = '06131214'  # Tên model cũ
 ```
 
-#### 4.2 Chạy Training
+### 4.2 Chạy Training
 
 ```bash
 cd D:\GloEC\01.Code
@@ -155,7 +147,7 @@ epoch1 -train: loss:0.1234   time:45.2s
 lr = [0.001]
 ```
 
-#### 4.3 Chế độ K-Fold Cross Validation
+### 4.3 Chế độ K-Fold Cross Validation
 
 Mặc định `iskfold = True`, model sẽ train theo **10-fold stratified cross-validation**:
 
@@ -165,9 +157,9 @@ Mặc định `iskfold = True`, model sẽ train theo **10-fold stratified cross
 
 ---
 
-### 5. Dự đoán (Inference)
+## 5. Dự đoán (Inference)
 
-#### 5.1 Chuẩn bị
+### 5.1 Chuẩn bị
 
 Mở `01.Code/predict.py`, sửa các dòng sau:
 
@@ -176,7 +168,7 @@ model_index = 'ESM_06131214'   # <-- Đổi thành tên model bạn đã train
 # Ví dụ: model_index = 'ESM_05101530'
 ```
 
-#### 5.2 Chạy dự đoán
+### 5.2 Chạy dự đoán
 
 ```bash
 cd D:\GloEC\01.Code
@@ -189,7 +181,7 @@ py -3.10 predict.py
 
 ---
 
-### 6. Troubleshooting
+## 6. Troubleshooting
 
 | Lỗi | Nguyên nhân | Cách khắc phục |
 |-----|-------------|----------------|
@@ -203,7 +195,7 @@ py -3.10 predict.py
 
 ---
 
-### 7. Lệnh tổng hợp (Quick Start)
+## 7. Lệnh tổng hợp (Quick Start)
 
 ```bash
 # 1. Vào thư mục project
@@ -216,7 +208,7 @@ mkdir Save_model, logs, fold_data
 py -3.10 -m pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
 py -3.10 -m pip install transformers pandas scikit-learn numpy loguru tqdm torch-summary tensorboardX
 
-# 4. Tạo ESM embeddings (BẮT BUỘC trước khi train)
+# 4. Tạo ESM embeddings
 cd 01.Code
 py -3.10 create_esm_hf.py
 
@@ -229,17 +221,7 @@ py -3.10 predict.py
 
 ---
 
-## In the Code：
-  Run "train.py" can retrain our GloEC model.
-  <br>Run "predict.py" to predict the given sequence embedded sample and output the prediction result file.
-  <br>"ESM.py" is the details of the GloEC model structure.
-  <br>"config_util.py" is the hyperparameter file for GloEC.
+## 8. Liên hệ
 
-## In the Datasets：
-  "basic training dataset "is used in the development of GloEC model, as well as 10-fold cross-validated ablation experiments.
-  <br>"New-438" is the latest enzyme to be included in the Swiss-port database, which contains 438 samples.
-  <br>"COFACTOR-237" has been proved to be a tough dataset in the field of enzyme function prediction, and we use it for cross-dataset validation.
-  <br>"Isoenzyme dataset" is an enzyme subtype dataset containing 6318 enzyme sequences.
-## about
-title = {GloEC: a hierarchical-aware global model for enzyme function prediction}
-<br>Contact: If you have any questions or suggestions with the code, please let us know. Contact Yiran Huang at hyr@gxu.edu.cn
+Nếu có câu hỏi hoặc gặp vấn đề với code, vui lòng liên hệ:  
+**Yiran Huang** — hyr@gxu.edu.cn

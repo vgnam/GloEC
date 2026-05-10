@@ -9,15 +9,15 @@ class Config(object):
         self.model_save_path = '../Save_model/'    # 模型保存路径
 
         # self.model_type = 'single'           # 可以选择 ‘single_hiera’ 或者 ‘mutil_hiera’
-        self.creat_vocab_data_path = '../Data/uniport_2022_5/data.csv'    #文件路径
-        self.train_data_path = '../Data/uniport_2022_5/f_train.csv'          #文件路径
-        self.eval_data_path = '../Data/uniport_2022_5/f_eval.csv'                #文件路径
-        self.test_data_path = '../Data/uniport_2022_5/f_time_test.csv'                #文件路径
-        # self.hiera_json = '../Data/split_c0.9/hierar.json'                 #层级关系文件
-        self.label_map_json = '../Data/uniport_2022_5/f_conti_label_map.json'              
-        self.data_path = '../Data/uniport_2022_5/'
-        self.predict_result_path = '../Data/predict_result/'
-        self.weight = '../Data/uniport_2022_5/f_train_weight.json'
+        self.creat_vocab_data_path = '../02.Datasets/uniport_2022_5/data.csv'    #文件路径
+        self.train_data_path = '../02.Datasets/uniport_2022_5/f_train.csv'          #文件路径
+        self.eval_data_path = '../02.Datasets/uniport_2022_5/f_eval.csv'                #文件路径
+        self.test_data_path = '../02.Datasets/uniport_2022_5/f_time_test.csv'                #文件路径
+        # self.hiera_json = '../02.Datasets/split_c0.9/hierar.json'                 #层级关系文件
+        self.label_map_json = '../02.Datasets/uniport_2022_5/f_conti_label_map.json'              
+        self.data_path = '../02.Datasets/uniport_2022_5/'
+        self.predict_result_path = '../02.Datasets/predict_result/'
+        self.weight = '../02.Datasets/uniport_2022_5/f_train_weight.json'
 
         # self.loss_type = 'CrossEntropyLoss'       # "CrossEntropyLoss"  or  ’BCEWithLogitsLoss‘
 
@@ -39,9 +39,9 @@ class Config(object):
         self.kfold = 10                             
         self.sure_full_kfold = False                
         self.kfold_epoch = 40                      
-        self.kfold_dataset_csv = '../Data/uniport_2022_5/f_train.csv'
-        self.kfold_dataset_esm = '../Data/uniport_2022_5/esm_f_train.pt'
-        self.kfold_label_map = '../Data/uniport_2022_5/f_conti_label_map.json'
+        self.kfold_dataset_csv = '../02.Datasets/uniport_2022_5/f_train.csv'
+        self.kfold_dataset_esm = '../02.Datasets/uniport_2022_5/esm_f_train.pt'
+        self.kfold_label_map = '../02.Datasets/uniport_2022_5/f_conti_label_map.json'
         self.iskfold = True
 
         # 关于层级惩罚
